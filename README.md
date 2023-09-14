@@ -1,9 +1,9 @@
 # Gleeman.JwtGenerator
 
-<h2>HOW TO USE</h2>
+## HOW TO USE ?
 
 
-<h4>Copy to appsettings.json and configure the parameters</h4>
+### appsettings.json
 
 ```csharp
 "TokenSetting": {
@@ -16,7 +16,7 @@
     "SigningKey": "You should be write here your security key!" // string
   }
 ```
-<h4>Add to program.cs</h4>
+### Program.cs
 
 ```
 builder.Services.AddJwtGenerator(builder.Configuration);
