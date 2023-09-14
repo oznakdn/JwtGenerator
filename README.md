@@ -27,10 +27,44 @@ app.UseAuthentication();
 app.UseAuthorization();
 ```
 
-### Usage
+## EXAMPLE
+
+### appsettings.json
+
+```csharp
+"TokenSetting": {
+  "SaveToken": true,
+  "ValidateIssuer": true,
+  "ValidateAudience": true,
+  "ValidateLifetime": true,
+  "Issuer": "This is issuer",
+  "Audience": "This is audience",
+  "SigningKey": "This is our security key"
+}
+```
+### Program.cs
+
+```
+builder.Services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("TestDb"));
+builder.Services.AddJwtGenerator(builder.Configuration);
+builder.Services.AddScoped<IUserService, UserService>();
+```
+
+```csharp
+Database.AddUserData(app);
+app.UseAuthentication();
+app.UseAuthorization();
+```
+
+
 
 #### Service
 ```csharp
+
+public interface IUserService
+{
+    Task<LoginResponse> LoginAsync(LoginRequest loginRequest);
+}
 
 public class UserService : IUserService
 {
@@ -85,7 +119,7 @@ public class UserService : IUserService
 ```
 #### Controller
 ```csharp
-    [Route("api/[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class AuthController : ControllerBase
 {
