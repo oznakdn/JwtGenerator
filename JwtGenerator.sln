@@ -7,10 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4C35732B-90A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gleeman.JwtGenerator", "src\Gleeman.JwtGenerator\Gleeman.JwtGenerator.csproj", "{30E0BEE5-D352-44A8-B091-5209B22F3AA9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{1802034A-88BD-4158-AFF6-A9C0C55BE5C7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gleeman.JwtGenerator.Tests", "test\Gleeman.JwtGenerator.Tests\Gleeman.JwtGenerator.Tests.csproj", "{AE069401-8EAD-43CE-8835-0F569A88580A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "example", "example", "{4E3EAD47-CC99-4644-8AED-238EE96ADFDF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gleeman.JwtGenerator.Example.Api", "example\Gleeman.JwtGenerator.Example.Api\Gleeman.JwtGenerator.Example.Api.csproj", "{808C5D02-2A62-4305-B1F1-688F6589C640}"
@@ -25,10 +21,6 @@ Global
 		{30E0BEE5-D352-44A8-B091-5209B22F3AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30E0BEE5-D352-44A8-B091-5209B22F3AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30E0BEE5-D352-44A8-B091-5209B22F3AA9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AE069401-8EAD-43CE-8835-0F569A88580A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AE069401-8EAD-43CE-8835-0F569A88580A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AE069401-8EAD-43CE-8835-0F569A88580A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AE069401-8EAD-43CE-8835-0F569A88580A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{808C5D02-2A62-4305-B1F1-688F6589C640}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{808C5D02-2A62-4305-B1F1-688F6589C640}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{808C5D02-2A62-4305-B1F1-688F6589C640}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,7 +31,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{30E0BEE5-D352-44A8-B091-5209B22F3AA9} = {4C35732B-90A3-4996-AC7C-240B26861079}
-		{AE069401-8EAD-43CE-8835-0F569A88580A} = {1802034A-88BD-4158-AFF6-A9C0C55BE5C7}
 		{808C5D02-2A62-4305-B1F1-688F6589C640} = {4E3EAD47-CC99-4644-8AED-238EE96ADFDF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
