@@ -143,5 +143,7 @@ public class AuthController : ControllerBase
     }
 }
 ```
-![Screenshot_1](https://github.com/oznakdn/JwtGenerator/assets/79724084/17814a20-4254-47bd-bb95-5075b8e46035)
+
+![Response](https://github.com/oznakdn/JwtGenerator/assets/79724084/11ee41a9-54b6-4bae-bb9f-94db8f189d61)
+
 
