@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography;
-
-namespace Gleeman.JwtGenerator.Generator;
+﻿namespace Gleeman.JwtGenerator.Generator;
 
 public class TokenGenerator : ITokenGenerator
 {
