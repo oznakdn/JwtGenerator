@@ -26,7 +26,7 @@ public static class ServiceConfigurationExtension
                 ValidateAudience = configuration.GetValue<bool>("TokenSetting:ValidateAudience"),
                 ValidateIssuerSigningKey = true,
                 ValidateLifetime = configuration.GetValue<bool>("TokenSetting:ValidateLifetime"),
-                ValidIssuer = configuration.GetValue<bool>("TokenSetting:ValidateIssuer") == true ? configuration.GetValue<string>("TokenSetting:Isser") : null,
+                ValidIssuer = configuration.GetValue<bool>("TokenSetting:ValidateIssuer") == true ? configuration.GetValue<string>("TokenSetting:Issuer") : null,
                 ValidAudience = configuration.GetValue<bool>("TokenSetting:ValidateAudience") == true ? configuration.GetValue<string>("TokenSetting:Audience") : null,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("TokenSetting:SigningKey")!)),
                 ClockSkew = TimeSpan.Zero,
