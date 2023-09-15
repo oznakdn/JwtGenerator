@@ -6,14 +6,14 @@
 ### appsettings.json
 
 ```csharp
-"TokenSetting": {
-    "SaveToken": true, // true or false
-    "ValidateIssuer": false, // true or false
-    "ValidateAudience": false, // true or false
-    "ValidateLifetime": true, // true or false
-    "Issuer": null, // string
-    "Audience": null, // string
-    "SigningKey": "You should be write here your security key!" // string
+ "TokenSetting": {
+    "SaveToken": true,
+    "ValidateIssuer": true,
+    "ValidateAudience": true,
+    "ValidateLifetime": true,
+    "Issuer": "http://localhost:5021",
+    "Audience": "http://localhost:5021",
+    "SigningKey": "ee98db58bc6847b189f04937b6cb30e3"
   }
 ```
 ### Program.cs
@@ -33,14 +33,14 @@ app.UseAuthorization();
 
 ```csharp
 "TokenSetting": {
-  "SaveToken": true,
-  "ValidateIssuer": true,
-  "ValidateAudience": true,
-  "ValidateLifetime": true,
-  "Issuer": "This is issuer",
-  "Audience": "This is audience",
-  "SigningKey": "This is our security key"
-}
+    "SaveToken": true,
+    "ValidateIssuer": true,
+    "ValidateAudience": true,
+    "ValidateLifetime": true,
+    "Issuer": "http://localhost:5021",
+    "Audience": "http://localhost:5021",
+    "SigningKey": "ee98db58bc6847b189f04937b6cb30e3"
+  }
 ```
 ### Program.cs
 
