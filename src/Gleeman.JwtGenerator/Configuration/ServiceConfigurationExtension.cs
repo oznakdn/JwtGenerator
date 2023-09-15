@@ -15,6 +15,7 @@ public static class ServiceConfigurationExtension
         services.AddAuthentication(scheme =>
         {
             scheme.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            scheme.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
         .AddJwtBearer(options =>
         {
