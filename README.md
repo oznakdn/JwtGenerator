@@ -1,5 +1,14 @@
 # Gleeman.JwtGenerator
 
+| Package |  Version | Popularity |
+| ------- | ----- | ----- |
+| `Gleeman.JwtGenerator` | [![NuGet](https://img.shields.io/nuget/v/Gleeman.JwtGenerator.svg)](https://www.nuget.org/packages/Gleeman.JwtGenerator) | [![Nuget](https://img.shields.io/nuget/dt/Gleeman.JwtGenerator.svg)](https://www.nuget.org/packages/Gleeman.JwtGenerator)
+<br>
+
+`dotnet` CLI
+```
+dotnet add package Gleeman.JwtGenerator --version 1.0.1
+```
 ## HOW TO USE ?
 
 
