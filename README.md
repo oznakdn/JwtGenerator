@@ -7,7 +7,7 @@
 
 `dotnet` CLI
 ```
-dotnet add package Gleeman.JwtGenerator --version 1.0.1
+> dotnet add package Gleeman.JwtGenerator --version 1.0.1
 ```
 ## HOW TO USE ?
 
