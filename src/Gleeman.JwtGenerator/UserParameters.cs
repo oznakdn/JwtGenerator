@@ -1,18 +1,19 @@
 ﻿namespace Gleeman.JwtGenerator;
 
-public class TokenParameter
+public class UserParameters
 {
-    public TokenParameter(string email = null, string username = null, string role = null, string dateofBirth = null, string mobilePhone = null)
+    public UserParameters(string userId, string email = null, string username = null, string dateofBirth = null, string mobilePhone = null)
     {
+        UserId = userId;
         Email = email;
         Username = username;
-        Role = role;
         DateOfBirth = dateofBirth;
         MobilePhone = mobilePhone;
     }
+    public string UserId { get; set; }
     public string Email { get; set; }
     public string Username { get; set; }
-    public string Role { get; set; }
     public string DateOfBirth { get; set; }
     public string MobilePhone { get; set; }
 }
+

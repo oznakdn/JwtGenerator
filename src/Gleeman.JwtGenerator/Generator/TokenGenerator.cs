@@ -1,22 +1,25 @@
-﻿namespace Gleeman.JwtGenerator.Generator;
+﻿using Gleeman.JwtGenerator.Helpers;
+
+namespace Gleeman.JwtGenerator.Generator;
 
 public class TokenGenerator : ITokenGenerator
 {
     private readonly TokenSetting _setting;
+    private List<Claim> claims = new();
     public TokenGenerator(IOptions<TokenSetting> setting)
     {
         _setting = setting.Value;
     }
-    public TokenResult GenerateAccessToken(TokenParameter tokenParameter, ExpireType expireType, int ExpireTime)
+    public TokenResult GenerateAccessToken(UserParameters userParameters, ExpireType expireType, int ExpireTime)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_setting.SigningKey!));
 
         SigningCredentials _signingCredentials = new(key, SecurityAlgorithms.HmacSha256);
 
-        DateTime _expires = SetExpireDate(expireType, ExpireTime);
+        DateTime _expires = TokenExpireHelper.SetExpireDate(expireType, ExpireTime);
 
         ClaimsIdentity claimsIdentity = new();
-        var claims = AddClaimsToToken(tokenParameter);
+        claims = AddClaimsToToken(userParameters);
         claimsIdentity!.AddClaims(claims);
 
         SecurityTokenDescriptor securityTokenDescriptor = new()
@@ -33,9 +36,68 @@ public class TokenGenerator : ITokenGenerator
         var token = tokenHandler.WriteToken(createToken);
         return new TokenResult(token, _expires);
     }
+
+
+    public TokenResult GenerateAccessToken(UserParameters userParameters, List<RoleParameters> roleParameters, ExpireType expireType, int ExpireTime)
+    {
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_setting.SigningKey!));
+
+        SigningCredentials _signingCredentials = new(key, SecurityAlgorithms.HmacSha256);
+
+        DateTime _expires = TokenExpireHelper.SetExpireDate(expireType, ExpireTime);
+
+        ClaimsIdentity claimsIdentity = new();
+        claims = AddClaimsToToken(userParameters, roleParameters);
+        claimsIdentity!.AddClaims(claims);
+
+        SecurityTokenDescriptor securityTokenDescriptor = new()
+        {
+            Issuer = _setting.Issuer,
+            Audience = _setting.Audience,
+            SigningCredentials = _signingCredentials,
+            Expires = _expires,
+            Subject = claimsIdentity
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var createToken = tokenHandler.CreateToken(securityTokenDescriptor);
+        var token = tokenHandler.WriteToken(createToken);
+        return new TokenResult(token, _expires);
+    }
+
+
+    public TokenResult GenerateAccessToken(UserParameters userParameters, RoleParameters roleParameters, ExpireType expireType, int ExpireTime)
+    {
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_setting.SigningKey!));
+
+        SigningCredentials _signingCredentials = new(key, SecurityAlgorithms.HmacSha256);
+
+        DateTime _expires = TokenExpireHelper.SetExpireDate(expireType, ExpireTime);
+
+        ClaimsIdentity claimsIdentity = new();
+        claims = AddClaimsToToken(userParameters, roleParameters);
+        claimsIdentity!.AddClaims(claims);
+
+        SecurityTokenDescriptor securityTokenDescriptor = new()
+        {
+            Issuer = _setting.Issuer,
+            Audience = _setting.Audience,
+            SigningCredentials = _signingCredentials,
+            Expires = _expires,
+            Subject = claimsIdentity
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var createToken = tokenHandler.CreateToken(securityTokenDescriptor);
+        var token = tokenHandler.WriteToken(createToken);
+        return new TokenResult(token, _expires);
+    }
+
+
+
     public TokenResult GenerateRefreshToken(ExpireType expireType, int ExpireTime)
     {
-        DateTime expires = SetExpireDate(expireType, ExpireTime);
+        DateTime expires = TokenExpireHelper.SetExpireDate(expireType, ExpireTime);
         var randomNumber = new byte[32];
         using var random = RandomNumberGenerator.Create();
         random.GetBytes(randomNumber);
@@ -43,51 +105,110 @@ public class TokenGenerator : ITokenGenerator
         return new TokenResult(refreshToken, expires);
     }
 
-    DateTime SetExpireDate(ExpireType expireType, int ExpireTime)
-    {
-        DateTime expires = expireType switch
-        {
-            ExpireType.Minute => DateTime.Now.AddMinutes(ExpireTime),
-            ExpireType.Hour => DateTime.Now.AddHours(ExpireTime),
-            ExpireType.Day => DateTime.Now.AddDays(ExpireTime),
-            ExpireType.Month => DateTime.Now.AddMonths(ExpireTime),
-            _ => throw new Exception("Expire type not found!")
-        };
 
-        return expires;
+    private List<Claim> AddClaimsToToken(UserParameters userParameters)
+    {
+
+        claims.Add(new Claim(ClaimTypes.NameIdentifier, userParameters.UserId));
+
+        if (!string.IsNullOrEmpty(userParameters.Email))
+        {
+            claims!.Add(new Claim(ClaimTypes.Email, userParameters.Email!));
+        }
+
+        if (!string.IsNullOrEmpty(userParameters.Username))
+        {
+            claims!.Add(new Claim(ClaimTypes.Name, userParameters.Username!));
+        }
+
+        if (userParameters.DateOfBirth != null)
+        {
+            claims!.Add(new Claim(ClaimTypes.DateOfBirth, userParameters.DateOfBirth.ToString()));
+        }
+
+        if (!string.IsNullOrEmpty(userParameters.MobilePhone))
+        {
+            claims!.Add(new Claim(ClaimTypes.MobilePhone, userParameters.MobilePhone));
+        }
+
+
+        return claims!;
     }
 
-    List<Claim> AddClaimsToToken(TokenParameter tokenParameter)
+    private List<Claim> AddClaimsToToken(UserParameters userParameters, List<RoleParameters> roles = null)
     {
-        List<Claim> claims = new();
 
-        if (!string.IsNullOrEmpty(tokenParameter.Email))
+        claims.Add(new Claim(ClaimTypes.NameIdentifier, userParameters.UserId));
+
+        if (!string.IsNullOrEmpty(userParameters.Email))
         {
-            claims!.Add(new Claim(ClaimTypes.Email, tokenParameter.Email!));
+            claims!.Add(new Claim(ClaimTypes.Email, userParameters.Email!));
         }
 
-        if (!string.IsNullOrEmpty(tokenParameter.Username))
+        if (!string.IsNullOrEmpty(userParameters.Username))
         {
-            claims!.Add(new Claim(ClaimTypes.Name, tokenParameter.Username!));
+            claims!.Add(new Claim(ClaimTypes.Name, userParameters.Username!));
         }
 
-        if (!string.IsNullOrEmpty(tokenParameter.Role))
+        if (userParameters.DateOfBirth != null)
         {
-            claims!.Add(new Claim(ClaimTypes.Role, tokenParameter.Role!));
+            claims!.Add(new Claim(ClaimTypes.DateOfBirth, userParameters.DateOfBirth.ToString()));
         }
 
-        if (tokenParameter.DateOfBirth != null)
+        if (!string.IsNullOrEmpty(userParameters.MobilePhone))
         {
-            claims!.Add(new Claim(ClaimTypes.DateOfBirth, tokenParameter.DateOfBirth.ToString()));
+            claims!.Add(new Claim(ClaimTypes.MobilePhone, userParameters.MobilePhone));
         }
 
-        if (!string.IsNullOrEmpty(tokenParameter.MobilePhone))
+        if (roles.Any())
         {
-            claims!.Add(new Claim(ClaimTypes.MobilePhone, tokenParameter.MobilePhone));
+            foreach (var role in roles)
+            {
+                if (!string.IsNullOrEmpty(role.Role))
+                {
+                    claims!.Add(new Claim(ClaimTypes.Role, role.Role));
+                }
+            }
         }
 
         return claims!;
     }
 
+    private List<Claim> AddClaimsToToken(UserParameters userParameters, RoleParameters role = null)
+    {
 
+        claims.Add(new Claim(ClaimTypes.NameIdentifier, userParameters.UserId));
+
+        if (!string.IsNullOrEmpty(userParameters.Email))
+        {
+            claims!.Add(new Claim(ClaimTypes.Email, userParameters.Email!));
+        }
+
+        if (!string.IsNullOrEmpty(userParameters.Username))
+        {
+            claims!.Add(new Claim(ClaimTypes.Name, userParameters.Username!));
+        }
+
+        if (userParameters.DateOfBirth != null)
+        {
+            claims!.Add(new Claim(ClaimTypes.DateOfBirth, userParameters.DateOfBirth.ToString()));
+        }
+
+        if (!string.IsNullOrEmpty(userParameters.MobilePhone))
+        {
+            claims!.Add(new Claim(ClaimTypes.MobilePhone, userParameters.MobilePhone));
+        }
+
+        if (role != null)
+        {
+
+            if (!string.IsNullOrEmpty(role.Role))
+            {
+                claims!.Add(new Claim(ClaimTypes.Role, role.Role));
+            }
+
+        }
+
+        return claims!;
+    }
 }

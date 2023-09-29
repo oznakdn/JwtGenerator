@@ -97,19 +97,44 @@ public class UserService : IUserService
             return new LoginResponseMessage("Email or Password is wrong!") { Success = false };
         }
 
-        var accessToken = _tokenGenerator.GenerateAccessToken(
-            new TokenParameter(
-            email:user.Email,
-            username:user.UserName!,
-            role:user.Role.RoleName,
-            dateofBirth:user.DateOfBirth.ToString()!,
-            mobilePhone:user.PhoneNumber!), 
-            ExpireType.Minute, 
-            5);
+        var userParameters = new UserParameters(
+            userId: user.Id.ToString(),
+            email: user.Email,
+            username: user.UserName ?? null,
+            dateofBirth: user.DateOfBirth.ToString(),
+            mobilePhone: user.PhoneNumber);
 
-        var refreshToken = _tokenGenerator.GenerateRefreshToken(
-            ExpireType.Minute, 
-            10);
+
+        /******************************** If user has more role ******************************
+         
+        var roleParameters = new List<RoleParameters>();
+        roleParameters = user.Roles.Select(x => new RoleParameters
+        {
+            Role = x.RoleName
+        }).ToList();
+
+        var accessToken = _tokenGenerator.GenerateAccessToken(userParameters, roleParameters,
+                          ExpireType.Minute,
+                          5);
+         *************************************************************************************/
+
+
+
+        /******************************** If user has a role ***********************************
+          var roleParameter = new RoleParameters();
+          roleParameter.Role = user.Role.RoleName;
+
+          var accessToken = _tokenGenerator.GenerateAccessToken(userParameters,roleParameter,
+                            ExpireType.Minute,
+                            5);
+         ***************************************************************************************/
+
+
+
+        // If user has no a role
+        var accessToken = _tokenGenerator.GenerateAccessToken(userParameters,
+            ExpireType.Minute,
+            5);
 
         user.Token = refreshToken.Token;
         user.TokenExpire = refreshToken.ExpireDate;
