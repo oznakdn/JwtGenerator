@@ -1,15 +1,9 @@
 # Gleeman.JwtGenerator
 
-| Package |  Version | Popularity |
-| ------- | ----- | ----- |
-| `Gleeman.JwtGenerator` | [![NuGet](https://img.shields.io/nuget/v/Gleeman.JwtGenerator.svg)](https://www.nuget.org/packages/Gleeman.JwtGenerator) | [![Nuget](https://img.shields.io/nuget/dt/Gleeman.JwtGenerator.svg)](https://www.nuget.org/packages/Gleeman.JwtGenerator)
-
-<br>
-
 `dotnet` CLI
 
 ```csharp
-$ dotnet add package Gleeman.JwtGenerator --version 2.0.0
+$ dotnet add package Gleeman.JwtGenerator --version 2.0.1
 ```
 ## HOW TO USE ?
 
@@ -99,23 +93,22 @@ public class UserService : IUserService
             return new LoginResponseMessage("Email or Password is wrong!") { Success = false };
         }
 
-        var userParameters = new UserParameters(
-            userId: user.Id.ToString(),
-            email: user.Email,
-            username: user.UserName ?? null,
-            dateofBirth: user.DateOfBirth.ToString(),
-            mobilePhone: user.PhoneNumber);
+       var userParameter = new UserParameter
+       {
+         Id = user.Id.ToString(),
+         Email= user.Email
+       };
 
 
         /******************************** If user has more role ******************************
          
-        var roleParameters = new List<RoleParameters>();
-        roleParameters = user.Roles.Select(x => new RoleParameters
+        var roleParameters = new List<RoleParameter>();
+        roleParameters = user.Roles.Select(x => new RoleParameter
         {
             Role = x.RoleName
         }).ToList();
 
-        var accessToken = _tokenGenerator.GenerateAccessToken(userParameters, roleParameters,
+        var accessToken = _tokenGenerator.GenerateAccessToken(userParameter, roleParameter,
                           ExpireType.Minute,
                           5);
          *************************************************************************************/
@@ -123,10 +116,10 @@ public class UserService : IUserService
 
 
         /******************************** If user has a role ***********************************
-          var roleParameter = new RoleParameters();
+          var roleParameter = new RoleParameter();
           roleParameter.Role = user.Role.RoleName;
 
-          var accessToken = _tokenGenerator.GenerateAccessToken(userParameters,roleParameter,
+          var accessToken = _tokenGenerator.GenerateAccessToken(userParameter,roleParameter,
                             ExpireType.Minute,
                             5);
          ***************************************************************************************/
@@ -134,7 +127,7 @@ public class UserService : IUserService
 
 
         // If user has no a role
-        var accessToken = _tokenGenerator.GenerateAccessToken(userParameters,
+        var accessToken = _tokenGenerator.GenerateAccessToken(userParameter,
             ExpireType.Minute,
             5);
 
