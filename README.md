@@ -2,7 +2,7 @@
 
 `dotnet` CLI
 
-```csharp
+```bash
 $ dotnet add package Gleeman.JwtGenerator --version 2.0.1
 ```
 ## HOW TO USE ?
