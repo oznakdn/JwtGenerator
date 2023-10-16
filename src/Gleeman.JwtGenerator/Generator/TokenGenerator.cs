@@ -10,7 +10,7 @@ public class TokenGenerator : ITokenGenerator
     {
         _setting = setting.Value;
     }
-    public TokenResult GenerateAccessToken(UserParameters userParameters, ExpireType expireType, int ExpireTime)
+    public TokenResult GenerateAccessToken(UserParameter userParameters, ExpireType expireType, int ExpireTime)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_setting.SigningKey!));
 
@@ -34,11 +34,15 @@ public class TokenGenerator : ITokenGenerator
         var tokenHandler = new JwtSecurityTokenHandler();
         var createToken = tokenHandler.CreateToken(securityTokenDescriptor);
         var token = tokenHandler.WriteToken(createToken);
-        return new TokenResult(token, _expires);
+        return new TokenResult
+        {
+            Token = token,
+            ExpireDate = _expires
+        };
     }
 
 
-    public TokenResult GenerateAccessToken(UserParameters userParameters, List<RoleParameters> roleParameters, ExpireType expireType, int ExpireTime)
+    public TokenResult GenerateAccessToken(UserParameter userParameters, List<RoleParameter> roleParameters, ExpireType expireType, int ExpireTime)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_setting.SigningKey!));
 
@@ -62,11 +66,15 @@ public class TokenGenerator : ITokenGenerator
         var tokenHandler = new JwtSecurityTokenHandler();
         var createToken = tokenHandler.CreateToken(securityTokenDescriptor);
         var token = tokenHandler.WriteToken(createToken);
-        return new TokenResult(token, _expires);
+        return new TokenResult
+        {
+            Token = token,
+            ExpireDate = _expires
+        };
     }
 
 
-    public TokenResult GenerateAccessToken(UserParameters userParameters, RoleParameters roleParameters, ExpireType expireType, int ExpireTime)
+    public TokenResult GenerateAccessToken(UserParameter userParameters, RoleParameter roleParameters, ExpireType expireType, int ExpireTime)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_setting.SigningKey!));
 
@@ -90,7 +98,11 @@ public class TokenGenerator : ITokenGenerator
         var tokenHandler = new JwtSecurityTokenHandler();
         var createToken = tokenHandler.CreateToken(securityTokenDescriptor);
         var token = tokenHandler.WriteToken(createToken);
-        return new TokenResult(token, _expires);
+        return new TokenResult
+        {
+            Token = token,
+            ExpireDate = _expires
+        };
     }
 
 
@@ -102,14 +114,18 @@ public class TokenGenerator : ITokenGenerator
         using var random = RandomNumberGenerator.Create();
         random.GetBytes(randomNumber);
         string refreshToken = Convert.ToBase64String(randomNumber);
-        return new TokenResult(refreshToken, expires);
+        return new TokenResult
+        {
+            Token = refreshToken,
+            ExpireDate = expires
+        };
     }
 
 
-    private List<Claim> AddClaimsToToken(UserParameters userParameters)
+    private List<Claim> AddClaimsToToken(UserParameter userParameters)
     {
 
-        claims.Add(new Claim(ClaimTypes.NameIdentifier, userParameters.UserId));
+        claims.Add(new Claim(ClaimTypes.NameIdentifier, userParameters.Id));
 
         if (!string.IsNullOrEmpty(userParameters.Email))
         {
@@ -135,10 +151,10 @@ public class TokenGenerator : ITokenGenerator
         return claims!;
     }
 
-    private List<Claim> AddClaimsToToken(UserParameters userParameters, List<RoleParameters> roles = null)
+    private List<Claim> AddClaimsToToken(UserParameter userParameters, List<RoleParameter> roles = null)
     {
 
-        claims.Add(new Claim(ClaimTypes.NameIdentifier, userParameters.UserId));
+        claims.Add(new Claim(ClaimTypes.NameIdentifier, userParameters.Id));
 
         if (!string.IsNullOrEmpty(userParameters.Email))
         {
@@ -174,10 +190,10 @@ public class TokenGenerator : ITokenGenerator
         return claims!;
     }
 
-    private List<Claim> AddClaimsToToken(UserParameters userParameters, RoleParameters role = null)
+    private List<Claim> AddClaimsToToken(UserParameter userParameters, RoleParameter role = null)
     {
 
-        claims.Add(new Claim(ClaimTypes.NameIdentifier, userParameters.UserId));
+        claims.Add(new Claim(ClaimTypes.NameIdentifier, userParameters.Id));
 
         if (!string.IsNullOrEmpty(userParameters.Email))
         {

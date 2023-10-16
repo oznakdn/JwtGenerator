@@ -1,4 +1,8 @@
 ﻿namespace Gleeman.JwtGenerator;
 
-public record TokenResult(string Token, DateTime ExpireDate);
+public class TokenResult
+{
+    public string Token { get; set; }
+    public DateTime ExpireDate { get; set; }
+}
 

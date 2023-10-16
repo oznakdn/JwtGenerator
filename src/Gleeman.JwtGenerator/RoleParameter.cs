@@ -1,6 +1,6 @@
 ﻿namespace Gleeman.JwtGenerator;
 
-public class RoleParameters
+public class RoleParameter
 {
     public string Role {  get; set; }
 }
