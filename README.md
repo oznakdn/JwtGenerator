@@ -131,6 +131,11 @@ public class UserService : IUserService
             ExpireType.Minute,
             5);
 
+
+         var refreshToken = _tokenGenerator.GenerateRefreshToken(
+            ExpireType.Minute,
+            10);
+
         user.Token = refreshToken.Token;
         user.TokenExpire = refreshToken.ExpireDate;
         _dbContext.Update(user);
