@@ -10,7 +10,7 @@ $ dotnet add package Gleeman.JwtGenerator --version 2.0.1
 
 ### appsettings.json
 
-```csharp
+```json
  "TokenSetting": {
     "SaveToken": true, // true or false
     "ValidateIssuer": false, // true or false
@@ -40,7 +40,7 @@ app.UseAuthorization();
 
 ### appsettings.json
 
-```csharp
+```json
 "TokenSetting": {
     "SaveToken": true,
     "ValidateIssuer": true,
