@@ -23,7 +23,11 @@ $ dotnet add package Gleeman.JwtGenerator --version 2.0.1
 ```
 ### Program.cs
 
+```csharp
+using Gleeman.JwtGenerator.Configuration;
 ```
+
+```csharp
 builder.Services.AddJwtGenerator(builder.Configuration);
 ```
 
