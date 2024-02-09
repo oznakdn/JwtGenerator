@@ -1,9 +1,6 @@
 # Gleeman.JwtGenerator
 
-[![NuGet](https://img.shields.io/nuget/v/Gleeman.JwtGenerator.svg)](https://www.nuget.org/packages/Gleeman.JwtGenerator/7.0.0)
 [![NuGet](https://img.shields.io/nuget/v/Gleeman.JwtGenerator.svg)](https://www.nuget.org/packages/Gleeman.JwtGenerator/8.0.0)
-
-
 
 `dotnet` 7.0
 
