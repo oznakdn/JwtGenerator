@@ -2,6 +2,7 @@
 
 public enum ExpireType
 {
+    Second,
     Minute,
     Hour,
     Day,

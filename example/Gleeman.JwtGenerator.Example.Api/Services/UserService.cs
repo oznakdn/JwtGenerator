@@ -34,54 +34,25 @@ public class UserService : IUserService
         };
 
 
-
-        /******************************** If user has more role ******************************
-         
-        var roleParameters = new List<RoleParameter>();
-        roleParameters = user.Roles.Select(x => new RoleParameters
+        var token =await _tokenGenerator.GenerateAccessAndRefreshTokenAsync(userParameter, ExpireType.Minute, role: new RoleParameter
         {
-            Role = x.RoleName
-        }).ToList();
-
-        var accessToken = _tokenGenerator.GenerateAccessToken(userParameter, roleParameter,
-                          ExpireType.Minute,
-                          5);
-         *************************************************************************************/
+            Role = user.Role.RoleName
+        });
 
 
-
-        /******************************** If user has a role ***********************************
-          var roleParameter = new RoleParameter();
-          roleParameter.Role = user.Role.RoleName;
-
-          var accessToken = _tokenGenerator.GenerateAccessToken(userParameter,roleParameter,
-                            ExpireType.Minute,
-                            5);
-         ***************************************************************************************/
-
-
-
-        // If user has no a role
-        var accessToken = _tokenGenerator.GenerateAccessToken(userParameter,
-            ExpireType.Minute,
-            5);
-
-
-        var refreshToken = _tokenGenerator.GenerateRefreshToken(
-            ExpireType.Minute,
-            10);
-
-        user.Token = refreshToken.Token;
-        user.TokenExpire = refreshToken.ExpireDate;
+        user.Token = token.RefreshToken;
+        user.TokenExpire = token.RefreshExpire;
         _dbContext.Update(user);
         await _dbContext.SaveChangesAsync();
+
         return new LoginResponse
         {
-            AccessToken = accessToken.Token,
-            AccessExpires = accessToken.ExpireDate,
-            RefreshToken = refreshToken.Token,
-            RefreshExpires = refreshToken.ExpireDate,
+            AccessToken = token.AccessToken,
+            AccessExpires = token.AccessExpire,
+            RefreshToken = token.RefreshToken,
+            RefreshExpires = token.RefreshExpire,
             Success = true
         };
+
     }
 }
