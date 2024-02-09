@@ -3,23 +3,24 @@
 `dotnet` CLI
 
 ```bash
-$ dotnet add package Gleeman.JwtGenerator --version 2.0.1
+$ dotnet add package Gleeman.JwtGenerator --version 7.0.0
 ```
 ## HOW TO USE ?
-
 
 ### appsettings.json
 
 ```json
  "TokenSetting": {
-    "SaveToken": true, // true or false
-    "ValidateIssuer": false, // true or false
-    "ValidateAudience": false, // true or false
-    "ValidateLifetime": true, // true or false
-    "Issuer": null, // string
-    "Audience": null, // string
-    "SigningKey": "You should be write here your security key!" // string
-  }
+  "SaveToken": , (default = true) // Optional
+  "ValidateIssuer": ,(default = true)  //  Optional
+  "ValidateAudience": , (default = true) // Optional
+  "ValidateLifetime": , (default = true) // Optional
+  "Issuer": "", 
+  "Audience": "",
+  "SigningKey": "", // Required
+  "AccessExpire":  (default = 0),
+  "RefreshExpire": (default = 0)
+}
 ```
 ### Program.cs
 
@@ -41,15 +42,16 @@ app.UseAuthorization();
 ### appsettings.json
 
 ```json
-"TokenSetting": {
-    "SaveToken": true,
-    "ValidateIssuer": true,
-    "ValidateAudience": true,
-    "ValidateLifetime": true,
-    "Issuer": "http://localhost:5021",
-    "Audience": "http://localhost:5021",
-    "SigningKey": "ee98db58bc6847b189f04937b6cb30e3"
-  }
+ "TokenSetting": {
+  "SaveToken": true, 
+  "ValidateIssuer": true,
+  "ValidateAudience": true,
+  "ValidateLifetime": true,
+  "Issuer": "http://localhost:5021",
+  "Audience": "http://localhost:5021",
+  "SigningKey": "ee98db58bc6847b189f04937b6cb30e3",
+  "AccessExpire": 1,
+  "RefreshExpire": 2
 ```
 ### Program.cs
 
@@ -103,55 +105,25 @@ public class UserService : IUserService
          Email= user.Email
        };
 
+       var token = await _tokenGenerator.GenerateAccessAndRefreshTokenAsync(userParameter, ExpireType.Minute, role: new RoleParameter
+                   {
+                      Role = user.Role.RoleName
+                   });
 
-        /******************************** If user has more role ******************************
-         
-        var roleParameters = new List<RoleParameter>();
-        roleParameters = user.Roles.Select(x => new RoleParameter
-        {
-            Role = x.RoleName
-        }).ToList();
+       user.Token = token.RefreshToken;
+       user.TokenExpire = token.RefreshExpire;
+       _dbContext.Update(user);
+       await _dbContext.SaveChangesAsync();
 
-        var accessToken = _tokenGenerator.GenerateAccessToken(userParameter, roleParameter,
-                          ExpireType.Minute,
-                          5);
-         *************************************************************************************/
-
-
-
-        /******************************** If user has a role ***********************************
-          var roleParameter = new RoleParameter();
-          roleParameter.Role = user.Role.RoleName;
-
-          var accessToken = _tokenGenerator.GenerateAccessToken(userParameter,roleParameter,
-                            ExpireType.Minute,
-                            5);
-         ***************************************************************************************/
-
-
-
-        // If user has no a role
-        var accessToken = _tokenGenerator.GenerateAccessToken(userParameter,
-            ExpireType.Minute,
-            5);
-
-
-         var refreshToken = _tokenGenerator.GenerateRefreshToken(
-            ExpireType.Minute,
-            10);
-
-        user.Token = refreshToken.Token;
-        user.TokenExpire = refreshToken.ExpireDate;
-        _dbContext.Update(user);
-        await _dbContext.SaveChangesAsync();
-        return new LoginResponse
-        {
-            AccessToken = accessToken.Token,
-            AccessExpires = accessToken.ExpireDate,
-            RefreshToken = refreshToken.Token,
-            RefreshExpires = refreshToken.ExpireDate,
-            Success = true
+       return new LoginResponse
+       {
+         AccessToken = token.AccessToken,
+         AccessExpires = token.AccessExpire,
+         RefreshToken = token.RefreshToken,
+         RefreshExpires = token.RefreshExpire,
+         Success = true
         };
+
     }
 }
 ```
