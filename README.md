@@ -1,9 +1,20 @@
 # Gleeman.JwtGenerator
 
-`dotnet` CLI
+[![NuGet](https://img.shields.io/nuget/v/Gleeman.JwtGenerator.svg)](https://www.nuget.org/packages/Gleeman.JwtGenerator/7.0.0)
+[![NuGet](https://img.shields.io/nuget/v/Gleeman.JwtGenerator.svg)](https://www.nuget.org/packages/Gleeman.JwtGenerator/8.0.0)
+
+
+
+`dotnet` 7.0
 
 ```bash
 $ dotnet add package Gleeman.JwtGenerator --version 7.0.0
+```
+
+`dotnet` 8.0
+
+```bash
+$ dotnet add package Gleeman.JwtGenerator --version 8.0.0
 ```
 ## HOW TO USE ?
 
